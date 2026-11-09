@@ -1,0 +1,11 @@
+Color Window Nuke for Adobe Illustrator
+
+Stops Illustrator from popping open the Color panel when you click the Fill or Stroke swatches, press the < key, and similar actions. You can still open the Color panel yourself any time with Window > Color or F6.
+
+This installs a small Illustrator plug-in into your own Illustrator Plug-ins folder, once for each Illustrator version on this Mac. Nothing in Illustrator itself is changed.
+
+Before you continue:
+- Open each Illustrator version you use at least once, so its Plug-ins folder exists.
+- You can leave Illustrator open. The fix starts the next time you open Illustrator.
+
+Independent project, not affiliated with or endorsed by Adobe.

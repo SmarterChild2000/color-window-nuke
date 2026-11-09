@@ -1,0 +1,58 @@
+COLOR WINDOW NUKE for Adobe Illustrator
+=======================================
+
+Illustrator pops the Color panel open whenever you click the Fill or Stroke swatches,
+even after you closed it. Color Window Nuke stops that. You can still open the Color panel
+yourself any time, with Window > Color or F6.
+
+
+WHAT IT FIXES
+- Clicking the Fill / Stroke swatches in the toolbar no longer opens the Color panel.
+- The < key (Color) and the Appearance panel no longer open it either.
+- If your Color panel is docked as a collapsed icon, its pop-out panel is hidden too.
+
+Opening it yourself always works: Window > Color, F6 (or your shortcut), or a click on its icon.
+
+
+INSTALL
+1. Open each Illustrator version you use at least once, then quit it.
+2. Double-click "Install Color Window Nuke.pkg" and follow the steps.
+   This copy isn't signed by an Apple-registered developer yet, so macOS may say it
+   "can't be opened". If it does:
+     a. Click Done.
+     b. Open System Settings > Privacy & Security.
+     c. Scroll down and click "Open Anyway" next to "Install Color Window Nuke".
+     d. Run the installer again.
+   Your Mac's password is needed because the installer keeps a copy of the plug-in
+   in /Library/Application Support.
+3. Open Illustrator. That's it. There are no settings.
+
+
+REMOVE
+Double-click "Uninstall Color Window Nuke.pkg", then restart Illustrator.
+Or delete ColorWindowNuke.aip yourself. In Finder choose Go > Go to Folder and paste:
+  ~/Library/Application Support/Adobe/
+Then open your Illustrator's folder (for example "Adobe Illustrator 30" for Illustrator 2026),
+then en_US (or your language), then Plug-ins.
+
+
+GOOD TO KNOW
+- The first Fill/Stroke click after opening Illustrator may show the Color panel for a
+  split second while Illustrator builds it. Every click after that is clean.
+- If the Color panel is docked as a collapsed icon, its icon stays highlighted after a
+  hidden pop-out, and opening it then takes two clicks on the icon. Turning on
+  Illustrator's Preferences > User Interface > Auto-Collapse Iconic Panels may help.
+- If the Color panel is docked as an expanded tab (for example behind Color Guide), clicking
+  Fill or Stroke still brings its tab forward. Illustrator offers no way to undo that.
+- Tested with Illustrator 2026 (30.8.2) and Illustrator 2027 Beta (31.1) on Apple Silicon Macs.
+  On other versions it stays inactive and Illustrator behaves normally.
+
+
+PRIVACY
+No internet access, no accounts, no tracking. It doesn't read your artwork or record what you
+type. It writes nothing except the plug-in itself, a small list of where it was installed
+(for the uninstaller), and the installer's copy.
+
+
+Independent project, not affiliated with or endorsed by Adobe.
+"Adobe" and "Illustrator" are trademarks of Adobe Inc.

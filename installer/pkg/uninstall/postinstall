@@ -1,0 +1,40 @@
+#!/bin/zsh
+# Color Window Nuke uninstaller: removes the plug-in from every Illustrator
+# Plug-ins folder of the logged-in user (only bundles that are ours), plus its
+# settings, logs and the installer's copy. Illustrator is never modified.
+#
+# Test hooks (never set by Installer): CWN_TEST_HOME.
+set -u
+bundle_id=com.colorwindownuke.illustrator.plugin
+
+if [[ -n ${CWN_TEST_HOME:-} ]]; then
+  home=$CWN_TEST_HOME
+  as_user=()
+else
+  user=$(/usr/bin/stat -f %Su /dev/console)
+  if [[ -z $user || $user == root || $user == loginwindow ]]; then
+    echo "Color Window Nuke: no user is logged in; nothing removed."
+    exit 0
+  fi
+  home=$(/usr/bin/dscl . -read "/Users/$user" NFSHomeDirectory | /usr/bin/awk '{print $2}')
+  as_user=(/usr/bin/sudo -u "$user")
+fi
+
+for dest in "$home/Library/Application Support/Adobe"/Adobe\ Illustrator*/*/Plug-ins/ColorWindowNuke.aip(N/); do
+  existing=$(/usr/bin/defaults read "$dest/Contents/Info" CFBundleIdentifier 2>/dev/null)
+  if [[ $existing != $bundle_id ]]; then
+    echo "Color Window Nuke: left $dest alone (not ours)"
+    continue
+  fi
+  "${as_user[@]}" /bin/rm -rf "$dest" && echo "Color Window Nuke: removed $dest"
+done
+"${as_user[@]}" /bin/rm -rf "$home/Library/Application Support/ColorWindowNuke" "$home/Library/Logs/ColorWindowNuke"
+if [[ -n ${CWN_TEST_HOME:-} ]]; then
+  /bin/rm -f "$home/Library/Preferences/com.colorwindownuke.illustrator.plist"
+else
+  "${as_user[@]}" /usr/bin/defaults delete com.colorwindownuke.illustrator 2>/dev/null
+  /bin/rm -rf "/Library/Application Support/ColorWindowNuke"
+  /usr/sbin/pkgutil --forget com.colorwindownuke.illustrator >/dev/null 2>&1
+fi
+echo "Color Window Nuke: removed. Restart Illustrator to unload it."
+exit 0

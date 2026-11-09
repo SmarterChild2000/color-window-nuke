@@ -1,0 +1,7 @@
+Color Window Nuke is installed.
+
+Quit Illustrator (Cmd-Q) and open it again to start the fix.
+
+The very first Fill or Stroke click after opening Illustrator may show the Color panel for a split second. Every click after that is clean.
+
+To remove it later, run "Uninstall Color Window Nuke" from the download, or delete ColorWindowNuke.aip from your Illustrator Plug-ins folder (see the Read Me).

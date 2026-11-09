@@ -1,0 +1,6 @@
+build/
+dist/
+__pycache__/
+.DS_Store
+# The Adobe Illustrator SDK is licensed by Adobe and must never be committed.
+plugin/sdk-shim/

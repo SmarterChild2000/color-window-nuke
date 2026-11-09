@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Mirrors the official Illustrator 2026 SDK template
+	     (<SDK>/samplecode/common/mac/Info.plist). -->
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleDisplayName</key>
+	<string>ColorWindowNuke</string>
+	<key>CFBundleExecutable</key>
+	<string>ColorWindowNuke</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.colorwindownuke.illustrator.plugin</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>ColorWindowNuke</string>
+	<key>CFBundlePackageType</key>
+	<string>ARPI</string>
+	<key>CFBundleSignature</key>
+	<string>ART5</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
+	<key>CFBundleVersion</key>
+	<string>1.0.0</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
+	<key>CSResourcesFileMapped</key>
+	<true/>
+	<key>LSRequiresCarbon</key>
+	<true/>
+	<key>LSMinimumSystemVersion</key>
+	<string>13.0</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>Color Window Nuke for Illustrator. Independent project, not affiliated with Adobe.</string>
+</dict>
+</plist>

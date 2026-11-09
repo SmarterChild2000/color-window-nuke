@@ -1,0 +1,59 @@
+#!/bin/zsh
+# Color Window Nuke installer: copies the plug-in into the logged-in user's
+# per-user Illustrator Plug-ins folders (one per installed Illustrator).
+# Runs as root from Installer.app. Never touches /Applications, Adobe files,
+# preferences or workspaces, and never overwrites a bundle that isn't ours.
+#
+# Test hooks (never set by Installer): CWN_TEST_HOME, CWN_TEST_SRC, CWN_TEST_APPS.
+set -u
+bundle_id=com.colorwindownuke.illustrator.plugin
+src=${CWN_TEST_SRC:-"/Library/Application Support/ColorWindowNuke/ColorWindowNuke.aip"}
+apps=${CWN_TEST_APPS:-/Applications}
+
+if [[ -n ${CWN_TEST_HOME:-} ]]; then
+  home=$CWN_TEST_HOME
+  as_user=()
+else
+  user=$(/usr/bin/stat -f %Su /dev/console)
+  if [[ -z $user || $user == root || $user == loginwindow ]]; then
+    echo "Color Window Nuke: no user is logged in; nothing installed."
+    exit 0
+  fi
+  home=$(/usr/bin/dscl . -read "/Users/$user" NFSHomeDirectory | /usr/bin/awk '{print $2}')
+  as_user=(/usr/bin/sudo -u "$user")
+fi
+
+support="$home/Library/Application Support/Adobe"
+state="$home/Library/Application Support/ColorWindowNuke"
+manifest="$state/install-manifest.txt"
+"${as_user[@]}" /bin/mkdir -p "$state"
+
+count=0
+for app in "$apps"/Adobe\ Illustrator*/Adobe\ Illustrator.app(N/); do
+  id=$(/usr/bin/defaults read "$app/Contents/Info" CFBundleIdentifier 2>/dev/null)
+  ver=$(/usr/bin/defaults read "$app/Contents/Info" CFBundleShortVersionString 2>/dev/null)
+  case $id in
+    com.adobe.illustratorBeta) settings="Adobe Illustrator $ver Beta Settings";;
+    com.adobe.illustrator)     settings="Adobe Illustrator ${ver%%.*}";;
+    *) continue;;
+  esac
+  # The folder exists once that Illustrator has been launched at least once.
+  for plugins in "$support/$settings"/*/Plug-ins(N/); do
+    dest=$plugins/ColorWindowNuke.aip
+    if [[ -e $dest ]]; then
+      existing=$(/usr/bin/defaults read "$dest/Contents/Info" CFBundleIdentifier 2>/dev/null)
+      if [[ $existing != $bundle_id ]]; then
+        echo "Color Window Nuke: skipped $dest (a different file with that name is there)"
+        continue
+      fi
+      "${as_user[@]}" /bin/rm -rf "$dest"
+    fi
+    if "${as_user[@]}" /usr/bin/ditto "$src" "$dest"; then
+      echo "Color Window Nuke: installed $dest"
+      "${as_user[@]}" /bin/sh -c 'grep -qxF "$1" "$2" 2>/dev/null || printf "%s\n" "$1" >> "$2"' _ "$dest" "$manifest"
+      count=$((count + 1))
+    fi
+  done
+done
+echo "Color Window Nuke: installed into $count Illustrator plug-in folder(s)."
+exit 0

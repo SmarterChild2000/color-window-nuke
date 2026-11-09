@@ -1,0 +1,36 @@
+#!/bin/zsh
+# nukectl — control Color Window Nuke for Illustrator without restarting Illustrator.
+# Settings take effect within ~1 second (the plug-in re-reads them on the next click).
+set -euo pipefail
+dom=${CWN_DEFAULTS_DOMAIN:-com.colorwindownuke.illustrator}
+logs=~/Library/Logs/ColorWindowNuke
+usage() {
+  cat <<EOF
+usage: nukectl <command>
+  status              show settings and installed copies
+  mode off|diagnose|enforce
+  pause | resume      temporarily return to native Illustrator behaviour
+  verbose on|off      include window snapshots in diagnostic logs
+  analyze [file]      summarise a diagnostic log (default: newest)
+  logs                print the log folder
+EOF
+}
+cmd=${1:-status}; shift || true
+case $cmd in
+  status)
+    echo "mode:    $(defaults read $dom mode 2>/dev/null || echo 'default (on for supported Illustrator versions)')"
+    echo "paused:  $(defaults read $dom paused 2>/dev/null || echo 0)"
+    echo "installed copies:"
+    copies=(~/Library/Application\ Support/Adobe/Adobe\ Illustrator*/*/Plug-ins/ColorWindowNuke.aip(N/))
+    (( ${#copies} )) && print -rl -- "  "${^copies} || echo "  (none)"
+    ;;
+  mode)
+    [[ ${1:-} == (off|diagnose|enforce) ]] || { usage; exit 2; }
+    defaults write $dom mode -string "$1"; echo "mode = $1";;
+  pause)  defaults write $dom paused -bool true; echo "paused";;
+  resume) defaults write $dom paused -bool false; echo "resumed";;
+  verbose) defaults write $dom verboseDiagnostics -bool $([[ ${1:-} == on ]] && echo true || echo false);;
+  analyze) python3 -I "${0:A:h}/analyze_log.py" "$@";;
+  logs) echo $logs;;
+  *) usage; exit 2;;
+esac

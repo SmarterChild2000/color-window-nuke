@@ -1,0 +1,5 @@
+Uninstall Color Window Nuke
+
+This removes the Color Window Nuke plug-in from all of your Illustrator Plug-ins folders, along with its settings. Illustrator itself is not touched.
+
+Restart Illustrator afterwards. It goes back to its normal behavior, and the Color panel will pop up on its own again.
